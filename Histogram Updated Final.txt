@@ -1,0 +1,47 @@
+# Set the working directory (adjust if needed)
+setwd("C:/Users/Zeeshan Ahmad/Desktop")
+
+# Load the dataset
+dataset <- read.csv("Melbourne_housing_FULL.csv")
+
+# Filter the data for the two suburbs of interest: Reservoir and Bentleigh East
+filtered_data <- subset(dataset, Suburb %in% c("Reservoir", "Bentleigh East") & !is.na(Price))
+
+# Create a combined histogram with price distributions for both suburbs
+hist(filtered_data$Price,
+     breaks = 30,
+     col = "gray",
+     main = "Histogram of Property Prices for Reservoir and Bentleigh East",
+     xlab = "Price (AUD)",
+     ylab = "Frequency",
+     xlim = c(min(filtered_data$Price), max(filtered_data$Price)),
+     freq = TRUE)
+
+# Add a normal distribution curve for Reservoir
+mean_reservoir <- mean(filtered_data$Price[filtered_data$Suburb == "Reservoir"])
+std_dev_reservoir <- sd(filtered_data$Price[filtered_data$Suburb == "Reservoir"])
+curve(dnorm(x, mean = mean_reservoir, sd = std_dev_reservoir) * 
+      length(filtered_data$Price[filtered_data$Suburb == "Reservoir"]) * 
+      diff(hist(filtered_data$Price, plot = FALSE)$breaks)[1],
+      col = "red", 
+      lwd = 2, 
+      add = TRUE, 
+      lty = 1) # Solid line for Reservoir
+
+# Add a normal distribution curve for Bentleigh East
+mean_bentleigh <- mean(filtered_data$Price[filtered_data$Suburb == "Bentleigh East"])
+std_dev_bentleigh <- sd(filtered_data$Price[filtered_data$Suburb == "Bentleigh East"])
+curve(dnorm(x, mean = mean_bentleigh, sd = std_dev_bentleigh) * 
+      length(filtered_data$Price[filtered_data$Suburb == "Bentleigh East"]) * 
+      diff(hist(filtered_data$Price, plot = FALSE)$breaks)[1],
+      col = "blue", 
+      lwd = 2, 
+      add = TRUE, 
+      lty = 2) # Dashed line for Bentleigh East
+
+# Add legend to the histogram
+legend("topright", 
+       legend = c("Reservoir (Red)", "Bentleigh East (Blue)"), 
+       col = c("red", "blue"), 
+       lwd = 2, 
+       lty = c(1, 2))

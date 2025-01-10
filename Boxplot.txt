@@ -1,0 +1,10 @@
+# Boxplot for comparing property prices between Reservoir and Bentleigh East
+> boxplot(Price ~ Suburb,
++         data = filtered_data,
++         col = c("skyblue", "lightgreen"),
++         main = "Boxplot of Property Prices by Suburb",
++         xlab = "Suburb",
++         ylab = "Price (AUD)",
++         outline = TRUE,
++         notch = TRUE)
+
